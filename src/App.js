@@ -23,21 +23,24 @@ function App() {
   const calculateResult = () => {
     const squareFootValue = Number(inputs.squareFoot) * 3;
     const smallAppliancesValue = Number(inputs.smallAppliances) * 1500;
-    
-    // Calculate Other Loads: first 10,000 + 40% of remainder
     const otherLoads = Number(inputs.otherLoads);
-    const otherLoadsValue = otherLoads <= 10000 
-      ? otherLoads 
-      : 10000 + (otherLoads - 10000) * 0.4;
-    
     const maxHVACValue = Number(inputs.maxHVAC);
 
-    const total = squareFootValue + smallAppliancesValue + otherLoadsValue + maxHVACValue;
-    const resultAmp = total / 240;
+    // First calculate the total of all values
+    const totalBeforeTier = squareFootValue + smallAppliancesValue + otherLoads;
+    
+    // Apply the tiered calculation
+    const totalAfterTier = totalBeforeTier <= 10000 
+      ? totalBeforeTier 
+      : 10000 + (totalBeforeTier - 10000) * 0.4;
+    
+    // Add maxHVAC and divide by 240
+    const finalTotal = totalAfterTier + maxHVACValue;
+    const resultAmp = finalTotal / 240;
 
     setResult(resultAmp);
     setShowResult(false);
-    setTimeout(() => setShowResult(true), 100); // 페이드 인 트리거
+    setTimeout(() => setShowResult(true), 100);
   };
 
   const handleButtonClick = () => {
